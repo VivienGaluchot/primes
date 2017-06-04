@@ -19,12 +19,8 @@ public class Algo {
 		PrimeCache cache = new PrimeCache(1000000);
 		Scanner scanner = new Scanner(System.in);
 
-		for (int x = 2; x < 100; x++) {
-			PrimeArray A = PrimeArray.create(x, cache);
-			System.out.println(x + "\t" + A);
-		}
-
 		while (true) {
+			System.out.println("-------------");
 			System.out.println("Enter a and b");
 			System.out.print("a " + "\t");
 			int a = scanner.nextInt();
@@ -39,14 +35,22 @@ public class Algo {
 			int com = A.compareTo(B);
 			if (com > 0)
 				System.out.println("a > b");
-			else if(com < 0)
+			else if (com < 0)
 				System.out.println("a < b");
 			else
 				System.out.println("a = b");
-				
-			int c = a + b;
-			System.out.println("a + b " + "\t" + c);
-			System.out.println(PrimeArray.create(c, cache));
+
+			System.out.println("a * b " + "\t" + a * b);
+			System.out.println(A.multiply(B));
+
+			System.out.println("a | b " + "\t" + (a % b == 0));
+			System.out.println(A.divideBy(B));
+
+			System.out.println("a / b " + "\t" + a / b);
+			System.out.println(A.divideBy(B));
+
+			System.out.println("a + b " + "\t" + a + b);
+			System.out.println(PrimeArray.create(a + b, cache));
 		}
 	}
 }
