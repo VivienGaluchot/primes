@@ -2,87 +2,7 @@
 package math;
 
 public class Algo {
-	static private int maxNbPrimes = 1000000;
-	static private int[] primes = new int[maxNbPrimes];
-	static private int computedPrimes = 0;
-
-	static private void computeOneMorePrime() {
-		int p = 0;
-		if (computedPrimes > 0)
-			p = primes[computedPrimes - 1];
-		boolean found = false;
-		while (!found && p < Integer.MAX_VALUE - 1) {
-			p++;
-			found = true;
-			for (int i = 1; i < computedPrimes; i++) {
-				if (p % primes[i] == 0) {
-					found = false;
-					break;
-				}
-			}
-		}
-		if (found == false)
-			throw new IllegalArgumentException("Can't find any more prime in int");
-		primes[computedPrimes] = p;
-		computedPrimes++;
-	}
-
-	static public int getPrime(int i) {
-		if (i > maxNbPrimes || i < 0)
-			throw new IllegalArgumentException("Out of bounds prime");
-		while (i >= computedPrimes)
-			computeOneMorePrime();
-		return primes[i];
-	}
-
-	static int primeId(int x) {
-		int i = 0;
-		while (getPrime(i) < x)
-			i++;
-		if (x == getPrime(i))
-			return i;
-		else
-			return -1;
-	}
-
-	static boolean isTruePrime(int x) {
-		int i = 0;
-		while (getPrime(i) < x)
-			i++;
-		return x == getPrime(i);
-	}
-
-	static int nextTruePrime(int x) {
-		int i = 0;
-		while (getPrime(i) <= x)
-			i++;
-		return getPrime(i);
-	}
-
-	static PrimeArray decompose(int n) {
-		if (n <= 0)
-			throw new IllegalArgumentException("power can't be negative");
-
-		int[] primesFactors = new int[maxNbPrimes];
-		int size = 0;
-
-		if (n == 1) {
-			primesFactors[0] = 1;
-			return new PrimeArray(primesFactors, 1);
-		}
-
-		// for each prime, test if his powers divide n
-		for (int i = 1; getPrime(i) <= n; i++) {
-			primesFactors[i] = 0;
-			while (n % pow(getPrime(i), primesFactors[i] + 1) == 0) {
-				primesFactors[i] = primesFactors[i] + 1;
-				size = i + 1;
-			}
-		}
-		return new PrimeArray(primesFactors, size);
-	}
-
-	static int pow(int x, int n) {
+	static public int pow(int x, int n) {
 		if (n < 0)
 			throw new IllegalArgumentException("power can't be negative");
 		int r = 1;
@@ -94,37 +14,48 @@ public class Algo {
 	}
 
 	public static void main(String[] args) {
+		PrimeCache cache = new PrimeCache(100000);
+
 		System.out.println("pow test");
 		for (int i = 0; i < 5; i++)
 			System.out.println(i + " : " + pow(5, i));
 
-		System.out.println("getPrime test");
+		System.out.println("cache.getPrime test");
 		for (int i = 0; i < 10; i++)
-			System.out.println(i + " : " + getPrime(i));
+			System.out.println(i + " : " + cache.getPrime(i));
 
-		System.out.println("isTruePrime test");
+		System.out.println("cache.isTruePrime test");
 		for (int i = -5; i < 15; i++)
-			System.out.println(i + " : " + isTruePrime(i));
+			System.out.println(i + " : " + cache.isTruePrime(i));
 
-		System.out.println("nextTruePrime test");
+		System.out.println("cache.getNextTruePrime test");
 		for (int i = -5; i < 15; i++)
-			System.out.println(i + " : " + nextTruePrime(i));
+			System.out.println(i + " : " + cache.getNextTruePrime(i));
 
-		System.out.println("decompose test");
-		for (int i = 1; i < 15; i++) {
-			PrimeArray a = decompose(i);
-			System.out.println(i + " : " + a + " = " + a.getValue());
+		System.out.println("cache.decompose test");
+		for (int i = 2; i < 15; i++) {
+			PrimeArray a = cache.decompose(i);
+			System.out.println(i + " : " + a);
+			if (a.getValue() != i)
+				System.out.println("ERROR : value = " + a.getValue());
+		}
+		for (int i = 2; i < 15; i++) {
+			PrimeArray a = cache.decompose(i);
+			System.out.println(i + " : " + a.getExpr());
 		}
 
 		System.out.println("multiply test");
-		for (int i = 1; i < 10; i++) {
-			PrimeArray a = decompose(i);
+		for (int i = 2; i < 10; i++) {
+			PrimeArray a = cache.decompose(i);
 			for (int j = i; j < 10; j++) {
-				PrimeArray b = decompose(j);
+				PrimeArray b = cache.decompose(j);
 				PrimeArray r = a.multiply(b);
-				System.out.println(i + "*" + j + " " + (i * j) + " : " + r + " = " + r.getValue());
+				System.out.println(i + "*" + j + " : " + r);
+				if (r.getValue() != i * j)
+					System.out.println("ERROR : value = " + r.getValue() + " !=" + (i * j));
 			}
 		}
+
 	}
 
 }
