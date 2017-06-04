@@ -4,23 +4,23 @@ public class PrimeCache {
 	private int maxNbPrimes;
 	private int[] primes;
 	private int computedPrimes;
-	
+
 	public PrimeCache(int maxNbPrimes) {
 		this.maxNbPrimes = maxNbPrimes;
 		this.primes = new int[maxNbPrimes];
 		this.computedPrimes = 0;
 	}
-	
+
 	private void computeOneMorePrime() {
-		if(computedPrimes == maxNbPrimes)
+		if (computedPrimes == maxNbPrimes)
 			throw new IllegalArgumentException("maxNbPrimes reached");
-		
+
 		int p = 0;
 		if (computedPrimes > 0)
 			p = primes[computedPrimes - 1];
 		else
 			p = 1;
-		
+
 		boolean found = false;
 		while (!found && p < Integer.MAX_VALUE - 1) {
 			p++;
@@ -45,28 +45,34 @@ public class PrimeCache {
 			computeOneMorePrime();
 		return primes[i];
 	}
-	
-	int getNextTruePrime(int x){
+
+	int getNextTruePrime(int x) {
 		int i = getIdNextOrEqualPrime(x);
 		return x < getPrime(i) ? getPrime(i) : getPrime(i + 1);
 	}
-	
+
 	boolean isTruePrime(int x) {
-		return getPrime(getIdNextOrEqualPrime(x)) == x;
+		if (x < getPrime(0))
+			return false;
+		for (int i = 0; getPrime(i) <= x/2; i++) {
+			if(x % getPrime(i) == 0)
+				return false;
+		}
+		return true;
 	}
-	
-	int getIdNextOrEqualPrime(int x){
+
+	int getIdNextOrEqualPrime(int x) {
 		int i = 0;
 		int j = computedPrimes - 1;
-		
-		if(getPrime(j) < x) {
-			while (getPrime(j) < x)
+
+		if (j < 0 || getPrime(j) < x) {
+			while (j < 0 || getPrime(j) < x)
 				j++;
 			return j;
 		} else {
-			while(j > i + 1) {
+			while (j > i + 1) {
 				int moy = (i + j) / 2;
-				if(getPrime(moy) < x) {
+				if (getPrime(moy) < x) {
 					i = moy;
 				} else {
 					j = moy;
