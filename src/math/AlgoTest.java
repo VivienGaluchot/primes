@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class AlgoTest {
-	
+
 	@Test
 	public void testPow() {
 		for (int i = 0; i < 5; i++)

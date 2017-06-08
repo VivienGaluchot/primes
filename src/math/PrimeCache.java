@@ -54,8 +54,8 @@ public class PrimeCache {
 	boolean isTruePrime(int x) {
 		if (x < getPrime(0))
 			return false;
-		for (int i = 0; getPrime(i) <= x/2; i++) {
-			if(x % getPrime(i) == 0)
+		for (int i = 0; getPrime(i) <= x / 2; i++) {
+			if (x % getPrime(i) == 0)
 				return false;
 		}
 		return true;

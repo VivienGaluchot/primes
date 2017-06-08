@@ -38,8 +38,8 @@ public class PrimeArray implements Comparable<PrimeArray> {
 		}
 		return sum == 1 || size == 1;
 	}
-	
-	public int getFactor(int i){
+
+	public int getFactor(int i) {
 		return factors[i];
 	}
 
