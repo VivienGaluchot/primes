@@ -83,8 +83,8 @@ public class PrimeCache {
 	}
 
 	PrimeArray decompose(int n) {
-		if (n < getPrime(0))
-			throw new IllegalArgumentException("can't decompose number < " + getPrime(0));
+		if (n < 1)
+			throw new IllegalArgumentException("can't decompose number < " + 1);
 
 		int[] primesFactors = new int[maxNbPrimes];
 		int size = 1;
@@ -93,7 +93,9 @@ public class PrimeCache {
 		// for each prime, test if his powers divide n
 		for (int i = 0; getPrime(i) <= n; i++) {
 			primesFactors[i] = 0;
-			while (n % Algo.pow(getPrime(i), primesFactors[i] + 1) == 0) {
+			int divider = getPrime(i);
+			while (n % divider == 0) {
+				divider = divider * getPrime(i);
 				primesFactors[i] = primesFactors[i] + 1;
 				size = i + 1;
 			}

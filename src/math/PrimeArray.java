@@ -1,10 +1,10 @@
 package math;
 
-public class PrimeArray implements Comparable<PrimeArray>{
+public class PrimeArray implements Comparable<PrimeArray> {
 	private int[] factors;
 	private int size;
 	private PrimeCache cache;
-	
+
 	static public PrimeArray create(int x, PrimeCache cache) {
 		return cache.decompose(x);
 	}
@@ -37,6 +37,10 @@ public class PrimeArray implements Comparable<PrimeArray>{
 				break;
 		}
 		return sum == 1 || size == 1;
+	}
+	
+	public int getFactor(int i){
+		return factors[i];
 	}
 
 	public PrimeArray multiply(PrimeArray b) {
@@ -96,9 +100,9 @@ public class PrimeArray implements Comparable<PrimeArray>{
 		}
 		return str.toString();
 	}
-	
+
 	@Override
-	public int compareTo(PrimeArray b){
+	public int compareTo(PrimeArray b) {
 		int size = Math.max(this.size, b.size);
 		int A = 1;
 		int B = 1;
@@ -108,9 +112,9 @@ public class PrimeArray implements Comparable<PrimeArray>{
 				currentExp += this.factors[i];
 			if (i < b.size)
 				currentExp -= b.factors[i];
-			if(currentExp > 0)
+			if (currentExp > 0)
 				A = A * Algo.pow(cache.getPrime(i), currentExp);
-			else if(currentExp < 0)
+			else if (currentExp < 0)
 				B = B * Algo.pow(cache.getPrime(i), -currentExp);
 		}
 		return A - B;
@@ -120,6 +124,7 @@ public class PrimeArray implements Comparable<PrimeArray>{
 	public String toString() {
 		StringBuffer str = new StringBuffer();
 		boolean first = true;
+		str.append("(" + getValue() + ")");
 		str.append("[");
 		for (int i = 0; i < size; i++) {
 			if (!first)
